@@ -292,25 +292,36 @@ document.addEventListener("DOMContentLoaded", () => {
   const subtitle = hero.querySelector(".hero__text p");
   const cta = hero.querySelector(".hero__cta");
 
-  if (!art || !text || !title) return; // seguridad
+  if (!art || !text || !title) return; // 🔒 seguridad
 
-  // Divide texto solo si no está ya envuelto
-  if (title && !title.querySelector(".letter")) {
+  // =====================================================
+  // 🔠 1️⃣ Divide el texto en PALABRAS (no letras)
+  // =====================================================
+  if (title && !title.querySelector(".word")) {
     const cleanText = title.textContent.trim();
-    title.innerHTML = cleanText.replace(/\S/g, "<span class='letter'>$&</span>");
+    const words = cleanText.split(/\s+/); // divide por espacios
+    title.innerHTML = words.map(w => `<span class="word">${w}</span>`).join(' ');
   }
 
-  // Reset inicial
+  // =====================================================
+  // ⚙️ 2️⃣ Reset inicial (todo invisible antes de animar)
+  // =====================================================
   anime.set([art, text], { opacity: 0 });
-  anime.set(".hero__text .letter", { opacity: 0, translateY: 20 });
+  anime.set(".hero__text .word", { opacity: 0, translateY: 20 });
+
   const tl = anime.timeline({ easing: "easeOutExpo" });
+
+  // Mejoras visuales de texto
   const headline = document.querySelector('.hero__text h1');
   if (headline) {
     headline.style.wordBreak = 'keep-all';
     headline.style.hyphens = 'none';
+    headline.style.whiteSpace = 'normal';
   }
 
-  // 1️⃣ Hero art aparece
+  // =====================================================
+  // 🎬 3️⃣ Hero art aparece primero con blur cinematográfico
+  // =====================================================
   tl.add({
     targets: art,
     opacity: [0, 1],
@@ -320,12 +331,14 @@ document.addEventListener("DOMContentLoaded", () => {
     easing: "easeOutCubic",
   })
 
-  // 2️⃣ Hero art desaparece con blur
+  // =====================================================
+  // 🎞️ 4️⃣ Hero art desaparece con blur
+  // =====================================================
   .add({
     targets: art,
     opacity: [1, 0],
     scale: [1, 1.5],
-    filter: ["blur(0px)", "blur(10px)"], // 🔥 efecto cinematográfico
+    filter: ["blur(0px)", "blur(10px)"],
     duration: 1200,
     easing: "easeInCubic",
     delay: 500,
@@ -334,43 +347,95 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   })
 
-  // 3️⃣ Aparece texto principal
+  // =====================================================
+  // ✨ 5️⃣ Aparece el texto principal PALABRA POR PALABRA
+  // =====================================================
   .add({
-    targets: ".hero__text .letter",
-    translateY: [0, 0],
+    targets: ".hero__text .word",
+    translateY: [40, 0],
     opacity: [0, 1],
-    delay: anime.stagger(30, { start: 200 }),
-    duration: 1500,
+    delay: anime.stagger(220, { start: 200 }), // 🔥 retrasa cada palabra
+    duration: 1000,
     begin: () => text.classList.add("visible"),
-  }, "-=00")
+  }, "-=200")
 
-  // 4️⃣ Subtítulo y botón
+  // =====================================================
+  // 🎯 6️⃣ Subtítulo y botón con entrada suave
+  // =====================================================
   .add({
     targets: [cta],
     opacity: [0, 1],
-    translateY: [40, 0],
-    duration: 600,
-    delay: anime.stagger(20),
-  }, "-=100");
+    translateY: [30, 0],
+    duration: 800,
+    delay: anime.stagger(150),
+  }, "-=600");
 
-  /* ===================== FEATURES ===================== */
-  const features = document.querySelectorAll(".features .card");
-  if (features.length) {
-    window.addEventListener("scroll", () => {
-      if (isInViewport(features[0])) {
-        features.forEach((card, i) => {
+  // =====================================================
+  // 🌊 7️⃣ (Opcional) Pulso suave en la imagen
+  // =====================================================
+  anime({
+    targets: art,
+    scale: [1, 1.03],
+    easing: "easeInOutSine",
+    direction: "alternate",
+    duration: 4000,
+    loop: true,
+    autoplay: true,
+  });
+
+  /* ------------------------------------------------------------
+   🟣 1️⃣ SECCIÓN FEATURES (Tarjetas con flotación 3D)
+  ------------------------------------------------------------ */
+  (function(){
+    const features = document.querySelectorAll(".cards-3 .card");
+    if (!features.length || !window.anime) return;
+
+    // 🔹 Estado inicial
+    anime.set(features, {
+      opacity: 0,
+      translateY: 80,
+      rotateY: -15,
+      scale: 0.95,
+      filter: "blur(12px)"
+    });
+
+    // 🔹 Observador (cuando entra en pantalla)
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
           anime({
-            targets: card,
+            targets: ".cards-3 .card",
             opacity: [0, 1],
-            translateY: [40, 0],
-            delay: i * 150,
-            duration: 800,
-            easing: "easeOutElastic(1, .7)"
+            translateY: [80, 0],
+            rotateY: [-15, 0],
+            scale: [0.95, 1],
+            filter: ["blur(12px)", "blur(0px)"],
+            delay: anime.stagger(120, { start: 0, from: "center" }),
+            duration: 900,
+            easing: "easeOutCubic",
           });
-        });
-      }
-    }, { once: true });
-  }
+
+          // ✨ Efecto de brillo breve (glow)
+          features.forEach(el => {
+            el.style.boxShadow = "0 0 0px rgba(91, 204, 255, 0)";
+            anime({
+              targets: el,
+              boxShadow: [
+                "0 0 0px rgba(91, 204, 255, 0)",
+                "0 0 24px rgba(91, 204, 255, 0.4)",
+                "0 0 0px rgba(91, 204, 255, 0)"
+              ],
+              easing: "easeOutQuad",
+              duration: 1000,
+              delay: 50
+            });
+          });
+        }
+      });
+    }, { threshold: 0.1 });
+
+    features.forEach(c => observer.observe(c));
+  })();
 
   /* ===================== CLIENTES ===================== */
   const clients = document.querySelectorAll(".clientes .card");
