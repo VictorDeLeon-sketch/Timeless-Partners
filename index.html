@@ -1,0 +1,517 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <!-- =======================================================
+    PLANTILLA "Timeless Partners" — Página de inicio
+    Autor: Victor De León
+    Descripción: Landing page moderna con header inferior fijo, 
+    SI FUNCIONO EL DRIVE COMPARTIDO
+  ========================================================== -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pagos Globales — Tu Marca</title>
+  <meta name="description" content="Landing page moderna inspirada en Jeton: animaciones, navegación inferior fija y formulario de contacto listo para adaptar." />
+  <meta name="theme-color" content="#e4416d" />
+  <link rel="icon" href="./assets/logo.svg" type="image/svg+xml">
+
+  <!-- Fuente limpia y moderna (Altone) -->
+  <link rel="preload" href="fonts/Altone-Regular.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="preload" href="fonts/Altone-Bold.ttf" as="font" type="font/ttf" crossorigin>
+  
+
+  <!-- Estilos principales -->
+  <link rel="stylesheet" href="./css/styles.css">
+  
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+  <script src="js/main.js"></script>
+
+  <!-- Librería de animación al hacer scroll (AOS) solo para parte visual del cliente -->
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css" />
+  
+  <!-- Estilos del mapa -->
+  <link rel="stylesheet" href="https://unpkg.com/jsvectormap@1.5.3/dist/css/jsvectormap.min.css">
+  <script src="https://unpkg.com/jsvectormap@1.5.3/dist/js/jsvectormap.min.js"></script>
+  <style>
+    #world-map {
+      display: flex;
+      height: 350px;
+      align-items: center;
+      justify-content: center;
+    }
+    .jvm-marker {
+      transition: transform 0.2s ease, fill 0.2s ease;
+    }
+    .jvm-marker:hover {
+      transform: scale(1);
+      fill: #00aaff !important;
+    }
+    .jsvectormap-marker-label {
+      fill: #ffffff !important; /* 👈 texto blanco */
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+    #map-container {
+      position: relative;
+      align-items: center;
+    }
+    /* Optimización para móvil */
+    @media (max-width: 768px) {
+      #map-container {
+        height: auto;
+        align-items: center;
+      }
+      .jvm-container {
+      align-items: center;
+      justify-self: center;
+      z-index: -1;
+    }
+      #world-map svg {
+        width: auto;
+        height: auto;
+        zoom: 1.3;
+      }
+    }
+    #world-map svg text {
+      fill: #ffffff !important;
+      stroke: #0436C1 !important;
+      stroke-width: 1px !important;
+      paint-order: stroke fill markers !important;
+      stroke-linejoin: round !important;
+      /* Fallback: text-shadow en navegadores que no muestren stroke en SVG */
+      text-shadow: 0 0 1px #000, 0 0 1px #000;
+      font-weight: 500 !important;
+    }
+    #world-map svg {
+      width: 500px;
+      height: 350px;
+      zoom: 1.4;
+    }
+    .jvm-conteiner {
+      align-items: center;
+      justify-self: center;
+    }
+  </style>
+  </link><script defer="True" src="https://unpkg.com/gsap@3.12.5/dist/gsap.min.js"></script><script defer="True" src="https://unpkg.com/gsap@3.12.5/dist/ScrollTrigger.min.js"></script><script defer="True" src="https://unpkg.com/split-type@0.3.4/umd/index.min.js"></script><style>
+/* ephemeral critical styles for enhanced hero */
+.hero{--glow:#66e0ff;--glow2:#9f6bff;--bg1:rgba(255,255,255,.06);--bg2:rgba(255,255,255,.02);}
+</style>
+</head>
+<body>
+  <!-- ====================================
+       CAPA DE FONDO CON GRADIENTE ANIMADO
+       (Se mueve sutilmente para dar vida)
+  ===================================== -->
+  <div class="bg-gradient"></div>
+  <div class="bg-noise" aria-hidden="true"></div>
+
+  <!-- ====================================
+       NAVEGACIÓN FIJA EN LA PARTE INFERIOR
+       (Header estilo Jeton pegado abajo)
+  ===================================== -->
+  <header class="bottom-nav" role="navigation" aria-label="Navegación principal">
+    <div class="bottom-nav__inner container">
+      <!-- Marca/Logo a la izquierda -->
+      <a class="brand" href="#home" aria-label="Inicio">
+        <img src="./assets/HORIZONTAL_BLANCO.svg" alt="Logo" width="200" height="40" />
+      </a>
+
+      <!-- Menú de navegación (escritorio) -->
+      <nav class="menu" aria-label="Secciones">
+        <a href="#nosotros">Nosotros</a>
+        <a href="#features">¿Qué hacemos?</a>
+        <a href="#clientes">Clientes</a>
+        <a href="#cobertura">Cobertura</a>
+        <a href="#contact">Contacto</a>
+      </nav>
+
+      <!-- CTA a la derecha (puedes apuntar a registro propio o a otra ruta) -->
+      <div class="cta">
+        <a class="btn btn--primary" href="#contact" role="button" aria-label="Empezar ahora">¡Quiero crecer mi marca!</a>
+      </div>
+
+      <!-- Botón hamburguesa -->
+      <button class="hamburger" aria-label="Abrir menú" aria-expanded="false" aria-controls="mobile-drawer">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- 🔹 Cajón lateral móvil (fuera del header) -->
+  <div id="mobile-drawer" role="dialog" aria-modal="true" aria-label="Menú móvil" aria-hidden="true">
+    <div class="drawer-content">
+      <nav class="drawer-menu">
+        <a href="#nosotros">Nosotros</a>
+        <a href="#features">¿Qué hacemos?</a>
+        <a href="#clientes">Clientes</a>
+        <a href="#cobertura">Cobertura</a>
+        <a href="#contact">Contacto</a>
+        <a class="btn btn--primary" href="#contact">¡Quiero crecer mi marca!</a>
+      </nav>
+    </div>
+  </div>
+
+  <!-- ====================================
+       CONTENIDO PRINCIPAL
+  ===================================== -->
+  <main id="home" class="main">
+    <!-- HERO: Mensaje principal + Ilustración -->
+    <section class="hero container" data-aos="fade-up">
+      <div class="hero__art" aria-hidden="true">
+        <img class="cover" src="./assets/LOGO_BLANCO.svg" type="img" alt="Logo Timeless">
+      </div>
+      <div class="hero__text">
+        <h1>Tu crecimiento es <br class="desktop-break">nuestro objetivo.</h1>
+        <!--<p>Impulsamos marcas innovadoras de alimentos, bebidas y bienestar, conectándolas con los principales mercados de Latinoamérica y Estados Unidos.</p>-->
+        <div class="hero__cta">
+          <a href="#contact" class="btn btn--primary">¡Quiero crecer mi marca!</a>
+        </div>     
+      </div>
+    </section>
+
+    <!-- Sección de Nosotros -->
+    <section id="nosotros" class="section container" data-aos="fade-up">
+      <div class="grid two">
+        <div class="feature-visual" data-aos="fade-right">
+            <img src="assets/images/nosotros.webp" alt="nosotros" class="media">
+        </div>
+        <div class="nosotros" data-aos="fade-left">
+          <br><h2>Somos tu <br><span class="highlight">socio estratégico.</span></h2>
+          <p>Conectamos marcas emergentes de alimentos, bebidas y bienestar con los principales canales de venta en México.</p>
+          <p>Más que una comercializadora, <strong>somos un socio estratégico que impulsa el crecimiento de tu marca</strong> con soluciones en <span class="highlight">distribución, logística y comercialización.</span></p>         
+          <p>Con experiencia internacional y más de 50 años en el mercado, llevamos tu marca más lejos.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sección de Funciones -->
+    <section id="features" class="section container" data-aos="fade-up">
+      <header class="section__header">
+        <h2><span class="highlight">¿Qué hacemos en TP?</span></h2>
+      </header>
+      <div class="grid cards-3">
+        <!-- Card 1 -->
+        <article class="card" data-aos="fade-up" data-aos-delay="50">
+          <div class="card__icon">
+            <img src="assets/images/card1.webp" alt="Impulsamos">
+          </div>
+          <h3>Impulsamos tu marca</h3>
+          <p>Elevamos tu marca con estrategias de comercialización, activaciones y asesoría personalizada que generan crecimiento real.</p>
+        </article>
+        <!-- Card 2 -->
+        <article class="card" data-aos="fade-up" data-aos-delay="100">
+          <div class="card__icon">
+            <img src="assets/images/card2.webp" alt="lejos">
+          </div>
+          <h3>Llegamos más lejos</h3>
+          <p>Abrimos y optimizamos tus canales de venta con una red logística eficiente a nivel nacional, regional e internacional, para que tu producto llegue más lejos.</p>
+        </article>
+        <!-- Card 3 -->
+        <article class="card" data-aos="fade-up" data-aos-delay="150">
+          <div class="card__icon">
+            <img src="assets/images/card3.webp" alt="Innovacion">
+          </div>
+          <h3>Innovación y estrategia</h3>
+          <p>Introducimos e innovamos contigo, desarrollando nuevos productos que fortalecen tu presencia, diferencian tu oferta y escalan tu mercado.</p>
+        </article>
+      </div>
+    </section>
+
+     <!-- Sección de productos -->
+    <section id="productos" class="section container" data-aos="fade-up">
+      <header class="section__header">
+        <h2><span class="highlight">Productos y Categorías</span></h2>
+      </header>
+      <div class="grid productos">
+        <!-- Card 1 -->
+        <article class="card2" data-aos="fade-up" data-aos-delay="50">
+          <div class="card__icon2">
+            <img src="assets/images/Alimentos.webp" alt="Impulsamos">
+          </div>
+        </article>
+        <!-- Card 2 -->
+        <article class="card2" data-aos="fade-up" data-aos-delay="100">
+          <div class="card__icon2">
+            <img src="assets/images/bebidas.webp" alt="lejos">
+          </div>
+        </article>
+        <!-- Card 3 -->
+        <article class="card2" data-aos="fade-up" data-aos-delay="150">
+          <div class="card__icon2">
+            <img src="assets/images/wellness.webp" alt="Innovacion">
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- Sección de Como lo hacemos -->
+    <section id="Como" class="section container" data-aos="fade-up">
+      <div class="grid four">
+        <div class="feature" data-aos="fade-right">
+          <h2><span class="highlight">¿Cómo lo hacemos?</span></h2>
+          <br><p>Nuestra fórmula es una mezcla de <span class="highlight">experiencia comprobada e innovación constante.</span></p>
+          <p>Contamos con un equipo con <span class="highlight">más de 50 años de trayectoria acumulada</span> en la industria, con relaciones de largo plazo en México, Estados Unidos, Latinoamérica y Europa.</p>
+          <p> Operamos con <span class="highlight">distribución ágil, alianzas estratégicas</span> con centros logísticos y un uso intensivo de análisis de datos para <span class="highlight">respaldo de cada decisión.</span></p>
+        </div>
+        <div class="feature-visual" data-aos="fade-left">
+          <img src="assets/images/Como.webp" alt="nosotros" class="media">  
+        </div>
+      </div>
+    </section>
+
+    <!-- Sección de Clientes -->
+    <section id="clientes" class="section container" data-aos="fade-up">
+      <header class="section__header">
+        <h2><span class="highlight">Nuestros Clientes</span></h2>
+      </header>
+      <div class="pricing">
+        <article class="price-card" data-aos="zoom-in">
+          <img src="assets/images/Walmart2.webp" alt="Walmart">
+        </article>
+
+        <article class="price-card" data-aos="zoom-in" data-aos-delay="50">
+          <img src="assets/images/Costco2.webp" alt="Costco">
+        </article>
+
+        <article class="price-card" data-aos="zoom-in" data-aos-delay="100">
+          <img src="assets/images/LaComer2.webp" alt="LaComer2">
+        </article>
+
+        <article class="price-card" data-aos="zoom-in" data-aos-delay="150">
+          <img src="assets/images/GOmart2.webp" alt="GOmart">
+        </article>
+        
+        <article class="price-card" data-aos="zoom-in" data-aos-delay="200">
+          <img src="assets/images/Soriana2.webp" alt="Soriana">
+        </article>
+
+        <article class="price-card" data-aos="zoom-in" data-aos-delay="250">
+          <img src="assets/images/Chedraui2.webp" alt="Chedraui">
+        </article>
+      </div>
+    </section>
+
+    <!-- Sección de Cobertura -->
+    <section id="cobertura" class="section container" data-aos="fade-up">
+      <header class="section__header">
+        <h2><span class="highlight">Nuestra Cobertura</span></h2>
+      </header>
+      <div class="grid five">
+        <div class="feature" data-aos="fade-right">
+          <ul class="custom-list">
+            <li class="MEX">Todas las regiones de México.</li>
+            <li class="USCAN">El mercado norteamericano de Estados Unidos y Canadá.</li>
+            <li class="WORLD">21 países donde TP ha tenido presencia mediante alianzas comerciales de alcance global.</li>
+            <li class="GO">296 Puntos de venta a través de la cadena de conveniencia GOmart.</li>
+          </ul>
+        </div>
+        
+        <div id="world-map" class="jvm-conteiner"></div>
+          <!-- Scripts -->
+          <script src="https://unpkg.com/jsvectormap"></script>
+          <script src="https://unpkg.com/jsvectormap/dist/maps/world.js"></script>
+          <script>
+            // --- Lista de marcadores ---
+            const markers = [
+              { name: "Canadá", coords: [56.1304, -106.3468] },
+              { name: "Estados Unidos", coords: [37.0902, -95.7129] },
+              { name: "México", coords: [23.6345, -102.5528] },
+              { name: "Costa Rica", coords: [9.7489, -83.7534] },
+              { name: "Ecuador", coords: [-1.8312, -78.1834] },
+              { name: "Perú", coords: [-9.1900, -75.0152] },
+              { name: "Chile", coords: [-35.6751, -71.5430] },
+              { name: "Reino Unido", coords: [55.3781, -3.4360] },
+              { name: "Alemania", coords: [51.1657, 10.4515] },
+              { name: "España", coords: [40.4637, -3.7492] },
+            ];
+
+            const map = new jsVectorMap({
+              selector: "#world-map",
+              map: "world",
+              backgroundColor: "transparent",
+
+              // Sin botones de zoom ni controles extra
+              zoomButtons: false,
+              draggable: true,
+              panOnDrag: true,
+
+              // Opciones de interacción — puedes desactivar scroll-zoom si lo deseas
+              zoomOnScroll: true, // ← evito zoom accidental con rueda/gesto
+              zoomOnScrollSpeed: 1.3,
+
+              // Estilos de regiones (países)
+              regionStyle: {
+                initial: {
+                  fill: "#e6ecf5",   // color de relleno de países (ajusta si quieres fondo más oscuro)
+                  stroke: "#1a1a1a",
+                  "stroke-width": 0.3,
+                },
+                hover: { fill: "#007bff" },
+              },
+
+              // MARKERS (pins)
+              markers: markers, // variable 'markers' ya existente en tu HTML
+              markerStyle: {
+                initial: { fill: "#00bfff", stroke: "#ffffff", r: 8 },
+                hover:    { fill: "#ffffff", stroke: "#00bfff", r: 10 },
+                selected: { fill: "#ffffff", stroke: "#007bff", r: 10 },
+              },
+
+              // Etiquetas: definimos tanto labels para MARKERS como para REGIONS y forzamos color blanco
+              labels: {
+                // nombres que acompañan a los pins
+                markers: {
+                  render: marker => marker.name,
+                  attrs: {
+                    fill: "#ffffff",
+                    "font-size": 10,
+                    "font-weight": 500
+                  }
+                },
+                // nombres de regiones (si tu versión de jsVectorMap los muestra)
+                regions: {
+                  // render puede devolver el nombre de la región (depende de la versión)
+                  render: region => region.name || "",
+                  attrs: {
+                    fill: "#ffffff",
+                    "font-size": 10,
+                    "font-weight": 500
+                  }
+                }
+              }
+            });
+
+            // -------------------------------------------------------------
+            // 1) FOCO INICIAL — Mostrar principalmente AMÉRICA + EUROPA
+            // -------------------------------------------------------------
+            // He elegido valores de centro/escala que cubren América + Europa occidental
+            // Si quieres ajustar el "recorte" cambia lat, lon y scale (explico abajo).
+            map.setFocus({ scale: 1.65, lat: 20, lon: -20, animate: false });
+
+            // -------------------------------------------------------------
+            // 2) CLICK / TOUCH EN PIN: hacer zoom al país objetivo
+            // -------------------------------------------------------------
+            // Maneja click/touch sobre marcadores. La API de jsVectorMap suele exponer
+            // el evento 'markerClick'. Si tu versión es diferente, ver nota abajo.
+            if (typeof map.on === 'function') {
+              map.on('markerClick', function(event) {
+                // event.marker: índice del marker, event.event: evento DOM, event.target: el mapa
+                const idx = event.marker;
+                if (typeof markers[idx] !== 'undefined') {
+                  const coords = markers[idx].coords; // [lat, lon]
+                  // Ajusta el scale objetivo según cuán cerca quieras hacer zoom
+                  const targetScale = 6; // 6 = bastante zoom al país; disminuye p.ej. a 4 para menos zoom
+                  map.setFocus({ lat: coords[0], lon: coords[1], scale: targetScale, animate: true });
+                }
+              });
+            } else {
+              // Fallback simple: escucha click en el SVG y busca el marker mediante atributos data-*
+              document.querySelector('#world-map').addEventListener('click', function(e){
+                // si los pins llevan un atributo data-marker-index (depende de la versión), úsalo;
+                // esto es solo un fallback básico y puede necesitar ajustes según la versión de jsVectorMap.
+              });
+            }
+        </script>
+      </div>
+    </section>
+
+    <!-- Formulario de Contacto -->
+    <section id="contact" class="section container section--alt" data-aos="fade-up">
+      <header class="section__header">
+        <h2><span class="highlight">¡Contáctanos!</span></h2>
+      </header>
+      <form id="contactForm" class="contact-form" novalidate>
+        <!-- Campo: Nombre -->
+        <label class="field">
+          <span>Nombre</span>
+          <input type="text" name="nombre" placeholder="Tu nombre" required>
+          <small class="error" aria-live="polite"></small>
+        </label>
+        <!-- Campo: Email -->
+        <label class="field">
+          <span>Email</span>
+          <input type="email" name="email" placeholder="tucorreo@ejemplo.com" required>
+          <small class="error" aria-live="polite"></small>
+        </label>
+        <!-- Campo: Mensaje -->
+        <label class="field full">
+          <span>Mensaje</span>
+          <textarea name="mensaje" rows="5" placeholder="¿En qué podemos ayudarte?" required></textarea>
+          <small class="error" aria-live="polite"></small>
+        </label>
+
+        <!-- Nota: Actualmente sin backend. El submit está simulado en js/main.js -->
+        <div class="form-actions">
+          <button type="submit" class="btn btn--primary">Enviar mensaje</button>
+          <p class="form-note">* Este formulario es de ejemplo. Pendiente de conexión con backend.</p>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <!-- ====================================
+       FOOTER COMPLETO
+  ===================================== -->
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div>
+        <a class="brand brand--footer" href="#home">
+          <img src="./assets/HORIZONTAL_BLANCO.svg" alt="Logo" width="200" height="40" />    
+        </a>
+        <p class="footer-text">Tu crecimiento es nuestro objetivo <strong>¡Escalemos juntos!</strong></p>
+        <p class="footer-text"></p>
+      </div>
+      <nav aria-label="Footer menús" class="footer-cols">
+        <div>
+          <h4>Producto</h4>
+          <ul>
+            <li><a href="#features">¿Qué hacemos?</a></li>
+            <li><a href="#productos">Productos y Categorías</a></li>
+            <li><a href="#Como">¿Cómo lo hacemos?</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Compañía</h4>
+          <ul>
+            <li><a href="#nosotros">Nosotros</a></li>
+            <li><a href="#clientes">Clientes</a></li>
+            <li><a href="#contact">Contacto</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Legal</h4>
+          <ul>
+            <li><a href="#">Términos</a></li>
+            <li><a href="#">Privacidad</a></li>
+            <li><a href="#">Cookies</a></li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+    <div class="container footer-base">
+      <small>© <span id="year"></span> Timeless Partners. Todos los derechos reservados.</small>
+      <div class="social">
+        <a href="#" aria-label="Twitter" title="Twitter">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 5.8c-.7.3-1.4.5-2.1.6.8-.5 1.3-1.1 1.6-2-.8.5-1.6.8-2.5 1-1.5-1.6-3.9-1.7-5.5-.2-1 .9-1.4 2.3-1.1 3.6-3.2-.2-6.1-1.7-8.1-4.2-1 1.7-.5 3.9 1.1 5 .6.4 1.3.7 2 .8-.6 0-1.2.2-1.8 0 .5 1.7 2 2.8 3.7 2.8-.9.7-2 1.1-3.1 1.1-.2 0-.4 0-.6 0 1.1 1.3 2.8 2 4.5 2-2.7 2-6.1 2.8-9.4 2.4 2.9 1.9 6.2 2.9 9.6 2.9 11.5 0 17.8-9.6 17.4-18 1.2-.8 1.9-1.7 2.6-2.7z"/></svg>
+        </a>
+        <a href="#" aria-label="LinkedIn" title="LinkedIn">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.94 6.5a2.44 2.44 0 11-.01-4.88 2.44 2.44 0 01.01 4.88zM2.5 8.42h4.88V21.5H2.5zM9.25 8.42h4.67v1.78h.07c.65-1.22 2.24-2.5 4.61-2.5 4.93 0 5.84 3.25 5.84 7.47V21.5h-4.88v-6.79c0-1.62-.03-3.71-2.26-3.71-2.26 0-2.61 1.76-2.61 3.59V21.5H9.25z"/></svg>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+   <!-- AOS Animations -->
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <script>
+    AOS.init({
+      once: false,
+      duration: 800,
+      easing: 'ease-in-out',
+    });
+  </script>
+  <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <script src="./js/main.js"></script>
+</body>
+</html>
