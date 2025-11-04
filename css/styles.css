@@ -419,7 +419,7 @@ h4 {
   position: relative;
   padding-left: 72px;
   margin-bottom: 25px;
-  font-size: 1rem;
+  font-size: 1.25rem;
   color: #e6ecf5;
 }
 
@@ -656,7 +656,6 @@ body.menu-open {
   font-weight: 700;
   letter-spacing: -0.03em;
   display: inline-block;
-  
 }
 
 .hero__text .letter {
@@ -742,4 +741,10 @@ body.menu-open {
 /* 🔥 Cuando el cajón está abierto, el contenido se desliza dentro */
 #mobile-drawer.open .drawer-content {
   transform: translateX(0);
+}
+.hero__text .word {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(20px);
+  white-space: pre;
 }
