@@ -157,6 +157,9 @@
   <main id="home" class="main">
     <!-- HERO: Mensaje principal + Ilustración -->
     <section class="hero container" data-aos="fade-up">
+      <div class="hero__bg" >
+        <spline-viewer url="https://prod.spline.design/IRmTe2UrLZFyd6xL/scene.splinecode"></spline-viewer>
+      </div>
       <div class="hero__art" aria-hidden="true">
         <img class="cover" src="./assets/LOGO_BLANCO.svg" type="img" alt="Logo Timeless">
       </div>
@@ -171,15 +174,18 @@
 
     <!-- Sección de Nosotros -->
     <section id="nosotros" class="section container" data-aos="fade-up">
+      <header class="section__header">
+        <h2>Somos tu <br><span class="highlight">socio estratégico.</span></h2>
+      </header>
       <div class="grid two">
-        <div class="feature-visual" data-aos="fade-right">
-            <img src="assets/images/nosotros.webp" alt="nosotros" class="media">
-        </div>
-        <div class="nosotros" data-aos="fade-left">
-          <br><h2>Somos tu <br><span class="highlight">socio estratégico.</span></h2>
+        <div class="nosotros" data-aos="fade-down-left">
           <p>Conectamos marcas emergentes de alimentos, bebidas y bienestar con los principales canales de venta en México.</p>
           <p>Más que una comercializadora, <strong>somos un socio estratégico que impulsa el crecimiento de tu marca</strong> con soluciones en <span class="highlight">distribución, logística y comercialización.</span></p>         
           <p>Con experiencia internacional y más de 50 años en el mercado, llevamos tu marca más lejos.</p>
+        </div>
+        <div class="feature-visual" data-aos="fade-down-right">
+          <!--<spline-viewer url="https://prod.spline.design/UbqAITUMSWl-NsJ2/scene.splinecode" class="img3D"></spline-viewer>-->
+          <hana-viewer url="https://prod.spline.design/sN4AS9KiGgdvbyUW-lrG/scene.hanacode" class="img3D"></hana-viewer>
         </div>
       </div>
     </section>
@@ -191,7 +197,7 @@
       </header>
       <div class="grid cards-3">
         <!-- Card 1 -->
-        <article class="card" data-aos="fade-up" data-aos-delay="50">
+        <article class="card" data-aos="zoom-in-up" data-aos-delay="150">
           <div class="card__icon">
             <img src="assets/images/card1.webp" alt="Impulsamos">
           </div>
@@ -199,7 +205,7 @@
           <p>Elevamos tu marca con estrategias de comercialización, activaciones y asesoría personalizada que generan crecimiento real.</p>
         </article>
         <!-- Card 2 -->
-        <article class="card" data-aos="fade-up" data-aos-delay="100">
+        <article class="card" data-aos="zoom-in-up" data-aos-delay="100">
           <div class="card__icon">
             <img src="assets/images/card2.webp" alt="lejos">
           </div>
@@ -207,7 +213,7 @@
           <p>Abrimos y optimizamos tus canales de venta con una red logística eficiente a nivel nacional, regional e internacional, para que tu producto llegue más lejos.</p>
         </article>
         <!-- Card 3 -->
-        <article class="card" data-aos="fade-up" data-aos-delay="150">
+        <article class="card" data-aos="zoom-in-up" data-aos-delay="150">
           <div class="card__icon">
             <img src="assets/images/card3.webp" alt="Innovacion">
           </div>
@@ -224,19 +230,28 @@
       </header>
       <div class="grid productos">
         <!-- Card 1 -->
-        <article class="card2" data-aos="fade-up" data-aos-delay="50">
+        <article class="card2" data-aos="fade-right"
+          data-aos-anchor="#example-anchor"
+          data-aos-offset="2500"
+          data-aos-duration="800" data-aos-delay="150">
           <div class="card__icon2">
             <img src="assets/images/Alimentos.webp" alt="Impulsamos">
           </div>
         </article>
         <!-- Card 2 -->
-        <article class="card2" data-aos="fade-up" data-aos-delay="100">
+        <article class="card2" data-aos="zoom-out"
+          data-aos-anchor="#example-anchor"
+          data-aos-offset="2500"
+          data-aos-duration="800" data-aos-delay="150">
           <div class="card__icon2">
             <img src="assets/images/bebidas.webp" alt="lejos">
           </div>
         </article>
         <!-- Card 3 -->
-        <article class="card2" data-aos="fade-up" data-aos-delay="150">
+        <article class="card2" data-aos="fade-left"
+          data-aos-anchor="#example-anchor"
+          data-aos-offset="2500"
+          data-aos-duration="800" data-aos-delay="150">
           <div class="card__icon2">
             <img src="assets/images/wellness.webp" alt="Innovacion">
           </div>
@@ -265,39 +280,39 @@
         <h2><span class="highlight">Empresas con las que hemos colaborado</span></h2>
       </header>
       <div class="pricing">
-        <article class="price-card" data-aos="zoom-in">
+        <article class="price-card" data-aos="zoom-in" data-aos-delay="100">
           <img src="assets/images/Walmart2.webp" alt="Walmart">
         </article>
 
-        <article class="price-card" data-aos="zoom-in" data-aos-delay="50">
+        <article class="price-card" data-aos="zoom-in" data-aos-delay="150">
           <img src="assets/images/Costco2.webp" alt="Costco">
         </article>
 
-        <article class="price-card" data-aos="zoom-in" data-aos-delay="100">
+        <article class="price-card" data-aos="zoom-in" data-aos-delay="250">
           <img src="assets/images/LaComer2.webp" alt="LaComer2">
         </article>
 
-        <article class="price-card" data-aos="zoom-in" data-aos-delay="150">
+        <article class="price-card" data-aos="zoom-in" data-aos-delay="300">
           <img src="assets/images/GOmart2.webp" alt="GOmart">
         </article>
         
-        <article class="price-card" data-aos="zoom-in" data-aos-delay="200">
+        <article class="price-card" data-aos="zoom-in" data-aos-delay="400">
           <img src="assets/images/Soriana2.webp" alt="Soriana">
         </article>
 
-        <article class="price-card" data-aos="zoom-in" data-aos-delay="250">
+        <article class="price-card" data-aos="zoom-in" data-aos-delay="450">
           <img src="assets/images/Chedraui2.webp" alt="Chedraui">
         </article>
       </div>
     </section>
 
     <!-- Sección de Cobertura -->
-    <section id="cobertura" class="section container" data-aos="fade-up">
+    <section id="cobertura" class="section container" data-aos="fade-up" data-aos-delay="50">
       <header class="section__header">
         <h2><span class="highlight">Nuestra Cobertura</span></h2>
       </header>
       <div class="grid five">
-        <div class="feature" data-aos="fade-right">
+        <div class="feature" data-aos="flip-left" data-aos-delay="200">
           <ul class="custom-list">
             <li class="MEX">Todas las regiones de México.</li>
             <li class="USCAN">El mercado norteamericano de Estados Unidos y Canadá.</li>
@@ -306,7 +321,7 @@
           </ul>
         </div>
         
-        <div id="world-map" class="jvm-conteiner"></div>
+        <div id="world-map" class="jvm-conteiner" data-aos="flip-right" data-aos-delay="200"></div>
           <!-- Scripts -->
           <script src="https://unpkg.com/jsvectormap"></script>
           <script src="https://unpkg.com/jsvectormap/dist/maps/world.js"></script>
@@ -416,7 +431,7 @@
     </section>
 
     <!-- Formulario de Contacto -->
-    <section id="contact" class="section container section--alt" data-aos="fade-up">
+    <section id="contact" class="section container section--alt" data-aos="zoom-in-up" data-aos-delay="150">
       <header class="section__header">
         <h2><span class="highlight">¡Contáctanos!</span></h2>
       </header>
@@ -511,7 +526,9 @@
       easing: 'ease-in-out',
     });
   </script>
+  <script type="module" src="https://unpkg.com/@splinetool/viewer@1.10.97/build/spline-viewer.js"></script>
   <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
   <script src="./js/main.js"></script>
+  <script type="module" src="https://cdn.spline.design/@splinetool/hana-viewer@1.1.2/hana-viewer.js"></script>
 </body>
 </html>
