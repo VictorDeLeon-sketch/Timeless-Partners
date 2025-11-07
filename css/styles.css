@@ -788,7 +788,7 @@ body.menu-open {
 
 .hero__text.visible {
   opacity: 1 !important; /* 🔥 fuerza visibilidad */
-  transform: translateY(-9vh);
+  transform: translateY(-15vh);
 }
 /* 🔥 Cuando el cajón está abierto, el contenido se desliza dentro */
 #mobile-drawer.open .drawer-content {
