@@ -320,6 +320,9 @@ section { scroll-margin-top: 82px; } /* o variable CSS con header height */
   h2{
     text-align: center;
   }
+     .hero__text.visible {
+    transform: translateY(-25vh);
+  }
 }
 
 @media (max-width: 760px){
