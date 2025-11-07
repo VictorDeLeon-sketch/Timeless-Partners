@@ -67,17 +67,19 @@ h4 {
 *, *::before, *::after {
   box-sizing: border-box;
 }
+section { scroll-margin-top: 82px; } /* o variable CSS con header height */
 
 /* Fondo optimizado */
 .bg-gradient{
   position: fixed;
   inset: -20%;
-  background: linear-gradient(135deg, #000000 25%, #0436C1 50%, #000000 75%, #0436C1 100%); /* #00B7EB */
+  background: linear-gradient(135deg, #000000 30%, #0436C1 50%, #000000 70%, #0436C1 90%); /* #00B7EB */
   background-size: 300% 300%;
   animation: gradientMove 18s linear infinite;
   z-index: -2;
   pointer-events: none;
   will-change: background-position;
+  backdrop-filter: blur(16px);
 }
 
 @media (max-width:700px){
@@ -278,7 +280,7 @@ h4 {
   border-radius: 2px;
   transition: all 0.3s ease;
 }
-@media (min-width: 900px){ .hamburger{ display: none; } }
+
 
 /* ---------- HERO ---------- */
 
@@ -327,10 +329,6 @@ h4 {
 .grid{ display: grid; gap: 18px; }
 .cards-3{ grid-template-columns: repeat(3, 1fr); }
 .two{ grid-template-columns: 1fr 1fr; align-items: center;}
-@media (max-width: 900px){
-  .cards-3{ grid-template-columns: 1fr;}
-  .two{ grid-template-columns: 1fr; }
-}
 
 .card{
   background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
@@ -346,13 +344,45 @@ h4 {
 
 .card h3{ margin: 8px 0; }
 .card p{ color: var(--muted); margin-top: 8px; }
-.feature-visual .img {
+.feature-visual .img, .img3D {
   align-self: center;
 }
 .feature-visual img {
   width: 90%;
 }
+.feature-visual {
+  width: 100%;
+  height: 450px; /* o el tamaño que necesites */
+  overflow: hidden; /* 👈 evita que se vea lo que sobresale */
+  position: relative;
+}
+.feature-visual .img3D {
+  width: 200%; /* 👈 expande la imagen dentro del div */
+  height: auto;
+  object-fit: cover;
+  transform: translateY(-20%); /* opcional, para centrar o mover */
+}
+@media (max-width: 768px) {
+  .feature-visual img {
+    width: 60%;
+  }
+  .feature-visual .img3D {
+    width: 170%;
+    transform: translateY(-20%); /* opcional, para centrar o mover */
+  }
+}
+@media (max-width: 900px){
+  .cards-3{ grid-template-columns: 1fr;}
+  .two{ grid-template-columns: 1fr; }
 
+  .feature-visual .img3D {
+    width: 170%;
+    transform: translateY(-24%); /* opcional, para centrar o mover */
+  }
+  .feature-visual img {
+    width: 60%;
+  }
+}
 /* ---------- PRODUCTOS ---------- */
 .productos{ 
   grid-template-columns: repeat(3, 1fr);
@@ -678,8 +708,10 @@ body.menu-open {
   text-align: center;
   padding-top: 0vh;  /* 🔥 sube todo un poco */
   padding-bottom: 0; /* opcional: quita espacio inferior */
-  scroll-margin-top: 0; /* No deja margen arriba */
+  scroll-margin-top: 82px; /* No deja margen arriba */
   min-height: 100vh;
+  position: relative;
+  overflow: hidden; /* 👈 evita que se vea lo que sobresale */
 }
 
 .hero__art {
@@ -747,4 +779,16 @@ body.menu-open {
   opacity: 0;
   transform: translateY(20px);
   white-space: pre;
+}
+@media (min-width: 900px){ .hamburger{ display: none; } }
+
+.hero__bg {
+  position: absolute;
+  inset: 0; /* Ocupa todo el hero */
+  z-index: 0; /* 👈 entre el fondo (0) y las animaciones (>1) */
+  width: 100%; /* 👈 expande la imagen dentro del div */
+  height: auto;
+  object-fit: cover;
+  transform: rotateX(180deg);
+  transform: scale(-1.15);
 }
