@@ -769,7 +769,7 @@ body.menu-open {
 .hero__art {
   z-index: 1;
   pointer-events: none;
-  transform: translateY(0vh); /* 🔥 súbelo un poco */
+  transform: translateY(5vh); /* 🔥 súbelo un poco */
   max-width: 800px;
   width: min(1100px, 92vw);
   margin-inline: auto;
