@@ -126,9 +126,10 @@ section { scroll-margin-top: 82px; } /* o variable CSS con header height */
 
 /* ---------- UTILIDADES ---------- */
 .container{
-  width: min(1100px, 92vw);
+  width: 100%;
   margin-inline: auto;
- 
+  position: relative; /* Necesario para que los hijos se posicionen relativos a este */
+  overflow: hidden;
 }
 .highlight{
   background: #ffffff;
@@ -327,8 +328,10 @@ section { scroll-margin-top: 82px; } /* o variable CSS con header height */
 
 /* ---------- GRIDS Y CARDS ---------- */
 .grid{ display: grid; gap: 18px; }
-.cards-3{ grid-template-columns: repeat(3, 1fr); }
-.two{ grid-template-columns: 1fr 1fr; align-items: center;}
+.cards-3{ grid-template-columns: repeat(3, 1fr);   width: min(1100px, 92vw);
+  margin-inline: auto;}
+.two{ grid-template-columns: 1fr 1fr; align-items: center;   width: min(1100px, 92vw);
+  margin-inline: auto;}
 
 .card{
   background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
@@ -387,6 +390,8 @@ section { scroll-margin-top: 82px; } /* o variable CSS con header height */
 .productos{ 
   grid-template-columns: repeat(3, 1fr);
   gap: 0px;
+    width: min(1100px, 92vw);
+  margin-inline: auto;
 }
 @media (max-width: 900px){
   .productos{ grid-template-columns: 1fr; align-items: center;}
@@ -400,6 +405,8 @@ section { scroll-margin-top: 82px; } /* o variable CSS con header height */
 /* ---------- CLIENTES ---------- */
 .pricing{
   display: grid; grid-template-columns: repeat(2, 0.8fr); gap: 22px;
+    width: min(1100px, 92vw);
+  margin-inline: auto;
 }
 .price-card{
   
@@ -420,7 +427,8 @@ section { scroll-margin-top: 82px; } /* o variable CSS con header height */
 
 /* ---------- CLIENTES ---------- */
 
-.four{ grid-template-columns: 1fr 0.7fr; align-items: center;}
+.four{ grid-template-columns: 1fr 0.7fr; align-items: center;   width: min(1100px, 92vw);
+  margin-inline: auto;}
 @media (max-width: 900px){
   .four{ grid-template-columns: 1fr; }
 }
@@ -433,6 +441,8 @@ section { scroll-margin-top: 82px; } /* o variable CSS con header height */
   grid-template-columns: 1fr 1fr;
   align-items: center;
   padding: 22px;
+    width: min(1100px, 92vw);
+  margin-inline: auto;
 }
 @media (max-width: 900px){
   .five{ grid-template-columns: 1fr; }
@@ -481,6 +491,8 @@ section { scroll-margin-top: 82px; } /* o variable CSS con header height */
   border-radius: var(--radius-xl);
   padding: 18px;
   box-shadow: var(--shadow-1);
+  width: min(1100px, 92vw);
+  margin-inline: auto;
 }
 .field{ display: grid; gap: 8px; }
 .field.full{ grid-column: 1 / -1; }
@@ -506,9 +518,12 @@ section { scroll-margin-top: 82px; } /* o variable CSS con header height */
   padding: 40px 0 120px; /* extra espacio para no chocar con la nav inferior */
   background: rgba(255,255,255,.02);
   border-top: 1px solid rgba(255,255,255,.08);
+
 }
 .footer-grid{
   display: grid; grid-template-columns: 0.8fr 1fr; gap: 24px;
+    width: min(1100px, 92vw);
+  margin-inline: auto;
 }
 .footer-text{ color: var(--muted); }
 .brand--footer{ margin-bottom: 8px; display: inline-flex; align-items: center; gap: 10px; color: #fff; text-decoration: none; font-weight: 800; }
@@ -523,6 +538,8 @@ section { scroll-margin-top: 82px; } /* o variable CSS con header height */
   border-top: 1px solid rgba(255,255,255,.08);
   display: flex; align-items: center; justify-content: space-between; gap: 16px;
   color: var(--muted);
+    width: min(1100px, 92vw);
+  margin-inline: auto;
 }
 .social a{ display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 10px; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12); }
 .social svg{ width: 18px; height: 18px; fill: #fff; opacity: .85; }
@@ -754,7 +771,8 @@ body.menu-open {
   pointer-events: none;
   transform: translateY(0vh); /* 🔥 súbelo un poco */
   max-width: 800px;
-
+  width: min(1100px, 92vw);
+  margin-inline: auto;
 }
 
 .hero__text {
@@ -764,6 +782,8 @@ body.menu-open {
   transition: opacity 0.6s ease;
   color: #fff;
   margin-top: 0;
+  width: min(1100px, 92vw);
+  margin-inline: auto;
 }
 
 .hero__text.visible {
@@ -789,6 +809,9 @@ body.menu-open {
   width: 100%; /* 👈 expande la imagen dentro del div */
   height: auto;
   object-fit: cover;
-  transform: rotateX(180deg);
-  transform: scale(-1.15);
+  opacity: 0.8;
+  scale: 1.2;
+  clip-path: inset(0 0 20px 0); /* oculta los últimos 80px de abajo */
+ /* transform: rotateX(180deg);
+  transform: scale(-1.2);*/
 }
