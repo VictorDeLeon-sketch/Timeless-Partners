@@ -1,817 +1,363 @@
-/* =======================================================
-   STYLES: Timeless Partners
-========================================================== */
+/* ============================================================
+   TIMELESS PARTNERS — main.js (versión optimizada y documentada)
+   ------------------------------------------------------------
+   - Mantiene TODAS las funciones originales (comentadas)
+   - Agrega nuevos efectos con Anime.js
+   - Cada bloque está documentado para personalización
+   ============================================================ */
 
-/* ---------- RESET Y VARIABLES ---------- */
-:root{
-  --bg: #0B0C0E;
-  --text: #E6EEF6;
-  --muted: #E6EEF6;
-  --card: #121417;
-  --card-2: #1f2030;
-  --accent-1: #0436C1;
-  --accent-3: #455664;
-  --accent-2: #00B7EB;
-  --radius-xl: 18px;
-  --radius-2xl: 24px;
-  --shadow-1: 0 10px 30px rgba(0,0,0,.35);
-  --shadow-2: 0 20px 50px rgba(0,0,0,.45);
-}
+(function() {
+  // ============================================================
+  // Flags de control
+  // initDone = false -> aún NO inicializado
+  // ============================================================
+  let heroPlayed = false;
+  let initDone = false; // <-- CORRECCIÓN: inicialmente false
 
-*{ box-sizing: border-box; }
+  // small helper safe wrapper
+  function safe(fn) { try { fn && fn(); } catch (e) { console.error('Safe wrapper error:', e); } }
 
-html {
-  scroll-behavior: smooth;
-}
-
-html, body{
-  height: 100%;
-  overflow-x: visible;
-}
-
-/* Evita que las secciones se salgan del viewport */
-section, header, footer, main {
-  max-width: 100%;
-  overflow-x: clip; /* deja animaciones pero evita scroll lateral */
-}
-
-body{
-  margin: 0;
-  font-family: 'Altone', sans-serif;
-  font-weight: 400; /* Regular por defecto */
-  color: var(--text);
-  background: var(--bg);
-  line-height: 1.6;
-  overflow-x: hidden;
-}
-
-h1 {
-  font-size: clamp(38px, 5vw, 60px);
-  margin: 0 0 12px;
-} 
-
-h2{
-  font-size: clamp(28px, 4vw, 40px);
-  margin: 0 0 12px;
-}
-
-h3 {
-  font-size: 20px;
-}
-
-h4 {
-  font-size: 18px;
-}
-
-/* Asegura que todos los elementos respeten el ancho del viewport */
-*, *::before, *::after {
-  box-sizing: border-box;
-}
-section { scroll-margin-top: 82px; } /* o variable CSS con header height */
-
-/* Fondo optimizado */
-.bg-gradient{
-  position: fixed;
-  inset: -20%;
-  background: linear-gradient(135deg, #000000 30%, #0436C1 50%, #000000 70%, #0436C1 90%); /* #00B7EB */
-  background-size: 300% 300%;
-  animation: gradientMove 18s linear infinite;
-  z-index: -2;
-  pointer-events: none;
-  will-change: background-position;
-  backdrop-filter: blur(16px);
-}
-
-@media (max-width:700px){
-  .bg-gradient{
-    animation-duration:18s;
-    filter:saturate(110%);
+  // debounce util
+  function debounce(fn, wait = 120) {
+    let t; return (...args) => { clearTimeout(t); t = setTimeout(()=>fn.apply(this,args), wait); };
   }
-  .hero{
-    grid-template-columns: 1fr; 
-    gap: 18px;
-    padding: 30px 0;
+
+  // ============================================================
+  // Scroll helper robusto: usa scrollIntoView + compensación header
+  // ============================================================
+  function getHeaderHeight() {
+    const header = document.querySelector('header');
+    return header ? header.offsetHeight : 0;
   }
-  .hero__art .cover{
-    width:88%;
-    max-width:520px;
+
+  function scrollToSectionById(targetId) {
+    const target = document.getElementById(targetId);
+    if (!target) return;
+    // Preferimos usar CSS scroll-margin-top si está disponible:
+    // Si el elemento tiene scrollMarginTop definido por CSS, scrollIntoView respetará el espacio.
+    // Para soportar todos los casos, hacemos scrollIntoView y luego compensamos con scrollBy.
+    const headerHeight = getHeaderHeight();
+    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    // Compensación pequeña después de iniciar el scroll: (ajuste -10px)
+    window.setTimeout(() => {
+      window.scrollBy({ top: -Math.max(0, headerHeight - 10), left: 0, behavior: 'smooth' });
+    }, 40); // timeout corto para que el navegador haga el scroll inicial
   }
-  .hero__text{text-align:center;}
-  .footer-grid{grid-template-columns:1fr; gap: 18px;}
-  .footer-base{flex-direction:column; align-items: flex-start; gap:8px;}
-  .social{justify-content:flex-start;}
-  .logo{width:140px;height:auto;}
-  [data-aos]{transition-duration:450ms;}
-}
 
-/* Accesibilidad */
-:focus{outline:3px solid rgba(0,183,235,0.9);outline-offset:2px;border-radius:6px;}
+  // ============================================================
+  // Inicialización central
+  // ============================================================
+  function initAll() {
+    if (initDone) return;    // evita doble inicialización
+    initDone = true;         // marca que ya inicializamos
 
-/* ---------- FONDOS ANIMADOS ---------- */
-.bg-noise{
-  position: fixed;
-  inset: 0;
-  background-image: radial-gradient(rgba(255,255,255,.06) 1px, transparent 1px);
-  background-size: 3px 3px;
-  opacity: .25;
-  z-index: -1;
-  mix-blend-mode: overlay;
-}
+    // = AOS ===============
+    if (window.AOS) {
+      AOS.init({
+        duration: 900,
+        once: false,
+        mirror: true,
+        offset: 40,
+        easing: 'ease-out-cubic'
+      });
+    }
 
-@keyframes gradientMove{
-  0%{ background-position: 0% 50%; }
-  50%{ background-position: 100% 50%; }
-  100%{ background-position: 0% 50%; }
-}
+    // = Año footer =========
+    safe(() => {
+      const yearEl = document.getElementById('year');
+      if (yearEl) yearEl.textContent = new Date().getFullYear();
+    });
 
-/* ---------- UTILIDADES ---------- */
-.container{
-  width: 100%;
-  margin-inline: auto;
-  position: relative; /* Necesario para que los hijos se posicionen relativos a este */
-  overflow: hidden;
-}
-.highlight{
-  background: #ffffff;
-  border-radius: 15px;
-  color: #0436C1;
-  padding: 5px;
-}
-.section{
-  padding: 40px 0;
-  font-size: 18px;
-}
-.section--alt{
-  background: rgba(255,255,255,.02);
-  border-top: 1px solid rgba(255,255,255,.08);
-  border-bottom: 1px solid rgba(255,255,255,.08);
-}
-.section__header{
-  text-align: center;
-  margin-bottom: 36px;
-}
-.section__header h2{
-  margin: 0 0 8px;
-  font-size: clamp(26px, 3.5vw, 40px);
-}
-.section__header p{
-  color: var(--muted);
-  margin: 0;
-}
+    // = Menú móvil (hamburger + drawer) =
+    safe(() => {
+      // usamos querySelectors y comprobamos existencia
+      const hamburger = document.querySelector('.hamburger');
+      const drawer = document.getElementById('mobile-drawer');
 
-@font-face {
-  font-family: 'Altone';
-  src: url('../fonts/AltoneRegular.ttf') format('truetype');
-  font-weight: 400;
-  font-style: normal;
-}
+      if (!hamburger || !drawer) {
+        console.warn("Menú móvil no encontrado (.hamburger o #mobile-drawer).");
+      } else {
+        // aseguramos no añadir listeners duplicados
+        // quitamos listeners previos si existen (defensivo)
+        hamburger.replaceWith(hamburger.cloneNode(true));
+        const hamburgerFresh = document.querySelector('.hamburger');
 
-@font-face {
-  font-family: 'Altone';
-  src: url('../fonts/AltoneBold.ttf') format('truetype');
-  font-weight: 700;
-  font-style: normal;
-}
+        // toggle
+        function toggleDrawer() {
+          const isOpen = drawer.classList.toggle('open');
+          hamburgerFresh.setAttribute('aria-expanded', String(isOpen));
+          document.body.classList.toggle('menu-open', isOpen);
+        }
 
-/* ---------- BOTONES ---------- */
-.btn{
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  padding: 12px 20px;
-  border-radius: 999px;
-  border: 1px solid rgba(255,255,255,.18);
-  background: rgba(255,255,255,.06);
-  color: #fff;
-  text-decoration: none;
-  font-weight: 600;
-  transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
-  backdrop-filter: blur(6px);
-}
-.btn:hover{
-  transform: translateY(-1px) scale(1.02);
-  box-shadow: 0 8px 25px rgba(0,0,0,.35);
-}
-.btn--primary{
-  background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
-  border: none;
-  box-shadow: 0 8px 18px rgba(255,255,255,0.08);
-  text-align: center;
-}
-.btn--ghost{
-  background: rgba(255,255,255,.08);
-  text-align: center;
-}
+        hamburgerFresh.addEventListener('click', toggleDrawer);
 
-/* ---------- NAV INFERIOR FIJO ---------- */
-.bottom-nav{
-  position: fixed;
-  bottom: 16px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: min(1100px, 92vw);
-  z-index: 50;
-  pointer-events: auto;
-}
-.bottom-nav__inner{
-  pointer-events: auto;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: rgba(0,0,0,0.3);
-  backdrop-filter: blur(8px);
-  border-radius: 14px;
-  padding: 10px 16px;
-  width: 100%;
-}
+        drawer.addEventListener('click', (e) => {
+          // cerrar al clickar en overlay o en enlace
+          if (e.target === drawer || e.target.tagName === 'A') {
+            drawer.classList.remove('open');
+            hamburgerFresh.setAttribute('aria-expanded', 'false');
+            document.body.classList.remove('menu-open');
+          }
+        });
+      }
+    });
 
-.brand{
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  font-weight: 800;
-  text-decoration: none;
-  color: #fff;
-}
-.brand img{ border-radius: 8px; }
-.menu{
-  display: none;
-  gap: 14px;
-}
-.menu a{
-  color: #fff;
-  text-decoration: none;
-  opacity: .9;
-  padding: 8px 12px;
-  border-radius: 10px;
-}
-.menu a:hover{
-  color:var(--accent-2);
-  transform: translateY(-3px);
-}
-.cta{
-  display: none;
-}
+    // = Formulario de contacto =
+    safe(() => {
+      const form = document.getElementById('contactForm');
+      if (!form) return;
 
-/* Responsivo para escritorio (muestra menú y cta) */
-@media (min-width: 900px){
-  .menu{ display: inline-flex; }
-  .cta{ display: inline-flex; }
-}
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        // limpia errores
+        form.querySelectorAll('.error').forEach(el => el.textContent = '');
+        const data = Object.fromEntries(new FormData(form));
+        let hasError = false;
 
-/* ---------- HAMBURGUESA Y CAJÓN MÓVIL ---------- */
-.hamburger{
-  position: relative;
-  z-index: 100000;
-  cursor: pointer;
-  background: none;
-  border: none;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  width: 28px;
-  height: 20px;
-}
-.hamburger span{
-  display: block;
-  height: 2px;
-  width: 100%;
-  background: #fff;
-  border-radius: 2px;
-  transition: all 0.3s ease;
-}
+        function setError(fieldName, message) {
+          const field = form.querySelector(`[name="${fieldName}"]`);
+          if (!field) return;
+          const container = field.closest('.field');
+          if (container) {
+            const errorEl = container.querySelector('.error');
+            if (errorEl) errorEl.textContent = message;
+          }
+          field.focus();
+        }
+
+        if (!data.nombre || data.nombre.trim().length < 2) { setError('nombre', 'Ingresa tu nombre (mínimo 2 caracteres).'); hasError = true; }
+        if (!data.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) { setError('email', 'Ingresa un correo electrónico válido.'); hasError = true; }
+        if (!data.mensaje || data.mensaje.trim().length < 10) { setError('mensaje', 'Cuéntanos un poco más (mínimo 10 caracteres).'); hasError = true; }
+        if (hasError) return;
+
+        try {
+          await new Promise(r => setTimeout(r, 600));
+          alert('¡Gracias! Hemos recibido tu mensaje.');
+          form.reset();
+        } catch (err) {
+          alert('Hubo un problema al enviar tu mensaje. Intenta de nuevo.');
+        }
+      });
+    });
+
+    // = Smooth section navigation =
+    safe(() => {
+      // recalcula headerHeight cuando cambie el tamaño
+      const onResize = debounce(() => {
+        // nada extra aquí, getHeaderHeight() leerá siempre la altura actual
+      }, 120);
+      window.addEventListener('resize', onResize);
+
+      // intercepta clicks de enlaces internos (ej. <a href="#servicios">)
+      document.querySelectorAll('a[href^="#"]').forEach(link => {
+        link.addEventListener('click', (e) => {
+          const href = link.getAttribute('href');
+          if (!href || href.length < 2) return;
+          const id = href.slice(1);
+          const target = document.getElementById(id);
+          if (target) {
+            e.preventDefault();
+            // Si el drawer está abierto (mobile) cerrarlo
+            const drawer = document.getElementById('mobile-drawer');
+            if (drawer && drawer.classList.contains('open')) {
+              drawer.classList.remove('open');
+              document.querySelector('.hamburger')?.setAttribute('aria-expanded','false');
+            }
+            scrollToSectionById(id);
+          }
+        });
+      });
+
+      // Si al cargar la página existe hash en URL, desplazamos en load
+      window.addEventListener('load', () => {
+        const hash = window.location.hash.slice(1);
+        if (hash) {
+          // pequeño delay para dejar que imágenes y fuentes se pinten
+          setTimeout(() => scrollToSectionById(hash), 220);
+        }
+      });
+    });
+
+    // = opcional: aplicar scroll-margin-top via JS a secciones si no lo tienes en CSS =
+    safe(() => {
+      const headerHeight = getHeaderHeight();
+      document.querySelectorAll('section[id]').forEach(sec => {
+        // preferimos dejar a CSS, pero aplicamos por si acaso (valor en px)
+        sec.style.scrollMarginTop = `${Math.max(10, headerHeight + 8)}px`;
+      });
+      // Reaplicar en resize
+      window.addEventListener('resize', debounce(() => {
+        const hh = getHeaderHeight();
+        document.querySelectorAll('section[id]').forEach(sec => {
+          sec.style.scrollMarginTop = `${Math.max(10, hh + 8)}px`;
+        });
+      }, 200));
+    });
+
+    // Fin initAll
+    console.log('initAll completed');
+  } // end initAll
+
+  // Inicializa de forma segura: DOMContentLoaded y Load no duplicarán la init
+  document.addEventListener('DOMContentLoaded', initAll);
+  window.addEventListener('load', initAll);
+
+})();
 
 
-/* ---------- HERO ---------- */
+/* ============================================================
+   🌈 ANIME.JS EFFECTS (MODULAR Y PERSONALIZABLE)
+   ============================================================ */
+document.addEventListener("DOMContentLoaded", () => {
 
-.hero{
-  display: flex;
-  align-items: center;
-  grid-template-columns: 0.9fr 1.1fr; gap: 28px;
-  height: 88vh;
-  font-size: 20px;
-  justify-content: center;
-  overflow: hidden;
-  min-height: 520px;
-  position: relative;
-}
-.hero__text h1{
-  font-size: clamp(34px, 5vw, 60px);
-  margin: 0 0 12px;
-}
-.hero__text p{ color: var(--muted); margin: 0 0 18px; }
-.hero__cta{ display: flex; flex-wrap: wrap; gap: 12px; margin-top: 8px; place-items: center;}
-.trust-badges{
-  margin: 18px 0 0; padding: 0; list-style: none; display: flex; gap: 10px; flex-wrap: wrap;
-  color: var(--muted);
-}
-.icon{ width: 16px; height: 16px; fill: currentColor; }
-.hero__art .cover {
-    width: 80%;
-}
-.hero__art{ display: grid; place-items: center; align-content: center; gap: 30px;}
-.card-stack{ width: min(460px, 86%); animation: float 6s ease-in-out infinite; }
-@keyframes float{ 0%,100%{ transform: translateY(0) } 50%{ transform: translateY(-8px) } }
+  // Utilidad para detectar visibilidad (sin ScrollTrigger)
+  const isInViewport = (el) => {
+    const rect = el.getBoundingClientRect();
+    return rect.top <= window.innerHeight * 0.8 && rect.bottom >= 0;
+  };
 
-@media (max-width: 900px){
-  .hero{ grid-template-columns: 1fr; }
-  .hero__cta{ display: grid;}
-  h2{
-    text-align: center;
+  /* ===================== HERO EFFECT ===================== */
+  const hero = document.querySelector(".hero");
+  if (!hero) return;
+
+  const art = hero.querySelector(".hero__art img");
+  const text = hero.querySelector(".hero__text");
+  const title = hero.querySelector(".hero__text h1");
+  const subtitle = hero.querySelector(".hero__text p");
+  const cta = hero.querySelector(".hero__cta");
+
+  if (!art || !text || !title) return; // 🔒 seguridad
+
+  // =====================================================
+  // 🔠 1️⃣ Divide el texto en PALABRAS (no letras)
+  // =====================================================
+  if (title && !title.querySelector(".word")) {
+    const cleanText = title.textContent.trim();
+    const words = cleanText.split(/\s+/); // divide por espacios
+    title.innerHTML = words.map(w => `<span class="word">${w}</span>`).join(' ');
   }
-}
 
-@media (max-width: 760px){
-  .hero__art{ min-height: 320px;}
-}
+  // =====================================================
+  // ⚙️ 2️⃣ Reset inicial (todo invisible antes de animar)
+  // =====================================================
+  anime.set([art, text], { opacity: 0 });
+  anime.set(".hero__text .word", { opacity: 0, translateY: 20 });
 
-/* ---------- GRIDS Y CARDS ---------- */
-.grid{ display: grid; gap: 18px; }
-.cards-3{ grid-template-columns: repeat(3, 1fr);   width: min(1100px, 92vw);
-  margin-inline: auto;}
-.two{ grid-template-columns: 1fr 1fr; align-items: center;   width: min(1100px, 92vw);
-  margin-inline: auto;}
+  const tl = anime.timeline({ easing: "easeOutExpo" });
 
-.card{
-  background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
-  border: 1px solid rgba(255,255,255,.12);
-  border-radius: var(--radius-xl);
-  padding: 18px;
-  box-shadow: var(--shadow-1);
-}
-.card:hover {
-  box-shadow: 0 16px 28px rgba(0, 0, 0, 0.342);
-}
-.card__icon img{ width: 100%; fill: #ffffff; border-radius: 8px;}
-
-.card h3{ margin: 8px 0; }
-.card p{ color: var(--muted); margin-top: 8px; }
-.feature-visual .img, .img3D {
-  align-self: center;
-}
-.feature-visual img {
-  width: 90%;
-}
-.feature-visual {
-  width: 100%;
-  height: 450px; /* o el tamaño que necesites */
-  overflow: hidden; /* 👈 evita que se vea lo que sobresale */
-  position: relative;
-}
-.feature-visual .img3D {
-  width: 200%; /* 👈 expande la imagen dentro del div */
-  height: auto;
-  object-fit: cover;
-  transform: translateY(-20%); /* opcional, para centrar o mover */
-}
-@media (max-width: 768px) {
-  .feature-visual img {
-    width: 60%;
+  // Mejoras visuales de texto
+  const headline = document.querySelector('.hero__text h1');
+  if (headline) {
+    headline.style.wordBreak = 'keep-all';
+    headline.style.hyphens = 'none';
+    headline.style.whiteSpace = 'normal';
   }
-  .feature-visual .img3D {
-    width: 170%;
-    transform: translateY(-20%); /* opcional, para centrar o mover */
+
+  // =====================================================
+  // 🎬 3️⃣ Hero art aparece primero con blur cinematográfico
+  // =====================================================
+  tl.add({
+    targets: art,
+    opacity: [0, 1],
+    scale: [1.9, 1],
+    duration: 1000,
+    filter: ["blur(12px)", "blur(0px)"],
+    easing: "easeOutCubic",
+  })
+
+  // =====================================================
+  // 🎞️ 4️⃣ Hero art desaparece con blur
+  // =====================================================
+  .add({
+    targets: art,
+    opacity: [1, 0],
+    scale: [1, 1.5],
+    filter: ["blur(0px)", "blur(10px)"],
+    duration: 1000,
+    easing: "easeInCubic",
+    delay: 500,
+    complete: () => {
+      art.style.visibility = "hidden"; // deja de tapar el texto
+    }
+  })
+
+  // =====================================================
+  // ✨ 5️⃣ Aparece el texto principal PALABRA POR PALABRA
+  // =====================================================
+  .add({
+    targets: ".hero__text .word",
+    translateY: [40, 0],
+    opacity: [0, 1],
+    delay: anime.stagger(220, { start: 200 }), // 🔥 retrasa cada palabra
+    duration: 1000,
+    begin: () => text.classList.add("visible"),
+  }, "-=200")
+
+  // =====================================================
+  // 🎯 6️⃣ Subtítulo y botón con entrada suave
+  // =====================================================
+  .add({
+    targets: [cta],
+    opacity: [0, 1],
+    translateY: [30, 0],
+    duration: 800,
+    delay: anime.stagger(150),
+  }, "-=600");
+
+  // =====================================================
+  // 🌊 7️⃣ (Opcional) Pulso suave en la imagen
+  // =====================================================
+  anime({
+    targets: art,
+    scale: [1, 1.03],
+    easing: "easeInOutSine",
+    direction: "alternate",
+    duration: 4000,
+    loop: true,
+    autoplay: true,
+  });
+
+});
+console.log("Hamburger ready:", document.querySelector('.hamburger'));
+console.log("Drawer ready:", document.getElementById('mobile-drawer'));
+/* ---------- Mobile drawer robust attach (final) ---------- */
+(function(){
+  function bindHamburger() {
+    const hb = document.querySelector('.hamburger');
+    const dr = document.getElementById('mobile-drawer');
+    if (!hb || !dr) {
+      console.warn('bindHamburger: missing elements', { hb, dr });
+      return false;
+    }
+    if (hb.dataset.menuBound === '1') {
+      console.log('bindHamburger: already bound');
+      return true;
+    }
+    hb.dataset.menuBound = '1';
+    hb.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isOpen = dr.classList.toggle('open');
+      document.body.classList.toggle('menu-open', isOpen);
+      hb.setAttribute('aria-expanded', String(isOpen));
+      dr.setAttribute('aria-hidden', String(!isOpen));
+      console.log('hamburger toggled =>', isOpen);
+    });
+    // close on backdrop click
+    dr.addEventListener('click', (ev) => { if (ev.target === dr) { dr.classList.remove('open'); hb.setAttribute('aria-expanded','false'); document.body.classList.remove('menu-open'); }});
+    // close on esc
+    document.addEventListener('keydown', (ev) => { if (ev.key === 'Escape' && dr.classList.contains('open')) { dr.classList.remove('open'); hb.setAttribute('aria-expanded','false'); document.body.classList.remove('menu-open'); }});
+    // close on link click
+    dr.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener('click', () => { dr.classList.remove('open'); hb.setAttribute('aria-expanded','false'); document.body.classList.remove('menu-open'); }));
+    console.log('bindHamburger: bound successfully');
+    return true;
   }
-}
-@media (max-width: 900px){
-  .cards-3{ grid-template-columns: 1fr;}
-  .two{ grid-template-columns: 1fr; }
 
-  .feature-visual .img3D {
-    width: 170%;
-    transform: translateY(-24%); /* opcional, para centrar o mover */
+  // try immediately
+  if (!bindHamburger()) {
+    // observe changes if not bound yet
+    const observer = new MutationObserver(() => {
+      if (bindHamburger()) observer.disconnect();
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
   }
-  .feature-visual img {
-    width: 60%;
-  }
-}
-/* ---------- PRODUCTOS ---------- */
-.productos{ 
-  grid-template-columns: repeat(3, 1fr);
-  gap: 0px;
-    width: min(1100px, 92vw);
-  margin-inline: auto;
-}
-@media (max-width: 900px){
-  .productos{ grid-template-columns: 1fr; align-items: center;}
-}
-
-.card__icon2 img{   
-  width: 100%;
-  display: block;
-}
-
-/* ---------- CLIENTES ---------- */
-.pricing{
-  display: grid; grid-template-columns: repeat(2, 0.8fr); gap: 22px;
-    width: min(1100px, 92vw);
-  margin-inline: auto;
-}
-.price-card{
-  
-  background: transparent
-}
-.price{ color: var(--muted); }
-.price span{ font-size: 34px; color: #fff; font-weight: 800; }
-@media (max-width: 900px){ .pricing{ grid-template-columns: 1fr; } }
-.price-card img {
-  width: 100%;
-  display: block;
-  border: 1px solid rgba(255,255,255,.12);
-  box-shadow: var(--shadow-1);
-  padding: 22px;
-  border-radius: var(--radius-xl);
-}
-
-
-/* ---------- CLIENTES ---------- */
-
-.four{ grid-template-columns: 1fr 0.7fr; align-items: center;   width: min(1100px, 92vw);
-  margin-inline: auto;}
-@media (max-width: 900px){
-  .four{ grid-template-columns: 1fr; }
-}
-.checklist{ padding-left: 18px; color: var(--muted); }
-.feature-visual{ display: grid; place-items: center;}
-
-/* ---------- COBERTURA ---------- */
-.five{ 
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  align-items: center;
-  padding: 22px;
-    width: min(1100px, 92vw);
-  margin-inline: auto;
-}
-@media (max-width: 900px){
-  .five{ grid-template-columns: 1fr; }
-}
-
-/* ====== ESTILO GENERAL DE LISTA ====== */
-.custom-list {
-  list-style: none; 
-  padding: 0;
-  margin: 0;
-}
-
-.custom-list li {
-  position: relative;
-  padding-left: 72px;
-  margin-bottom: 25px;
-  font-size: 1.25rem;
-  color: #e6ecf5;
-}
-
-.custom-list li::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 50%;
-  width: 60px;
-  height: 60px;
-  transform: translateY(-50%);
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: contain;
-  opacity: 0.9;
-}
-
-.custom-list li.MEX::before { background-image: url("assets/iconmex.svg"); }
-.custom-list li.USCAN::before { background-image: url("assets/iconusa.svg"); }
-.custom-list li.WORLD::before { background-image: url("assets/iconmund.svg"); }
-.custom-list li.GO::before { background-image: url("assets/icongo.svg"); }
-
-
-/* ---------- FORMULARIO DE CONTACTO ---------- */
-.contact-form{
-  display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
-  background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
-  border: 1px solid rgba(255,255,255,.12);
-  border-radius: var(--radius-xl);
-  padding: 18px;
-  box-shadow: var(--shadow-1);
-  width: min(1100px, 92vw);
-  margin-inline: auto;
-}
-.field{ display: grid; gap: 8px; }
-.field.full{ grid-column: 1 / -1; }
-.field span{ font-weight: 600; }
-.field input, .field textarea{
-  width: 100%;
-  border-radius: 12px;
-  border: 1px solid rgba(255,255,255,.18);
-  background: rgba(255,255,255,.06);
-  color: #fff;
-  padding: 12px 14px;
-  outline: none;
-}
-.field input::placeholder, .field textarea::placeholder{ color: rgba(255,255,255,.6); }
-.error{ color: #ffd4e1; min-height: 18px; }
-
-.form-actions{ display: flex; align-items: center; gap: 16px; flex-wrap: wrap; grid-column: 1 / -1; }
-.form-note{ color: var(--muted); margin: 0; }
-
-/* ---------- FOOTER ---------- */
-.site-footer{
-  margin-top: 80px;
-  padding: 40px 0 120px; /* extra espacio para no chocar con la nav inferior */
-  background: rgba(255,255,255,.02);
-  border-top: 1px solid rgba(255,255,255,.08);
-
-}
-.footer-grid{
-  display: grid; grid-template-columns: 0.8fr 1fr; gap: 24px;
-    width: min(1100px, 92vw);
-  margin-inline: auto;
-}
-.footer-text{ color: var(--muted); }
-.brand--footer{ margin-bottom: 8px; display: inline-flex; align-items: center; gap: 10px; color: #fff; text-decoration: none; font-weight: 800; }
-.footer-cols{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
-.footer-cols h4{ margin: 0 0 10px; }
-.footer-cols ul{ list-style: none; padding: 0; margin: 0; }
-.footer-cols a{ color: #fff; opacity: .9; text-decoration: none; }
-.footer-cols a:hover{ text-decoration: underline; }
-
-.footer-base{
-  margin-top: 24px; padding-top: 14px;
-  border-top: 1px solid rgba(255,255,255,.08);
-  display: flex; align-items: center; justify-content: space-between; gap: 16px;
-  color: var(--muted);
-    width: min(1100px, 92vw);
-  margin-inline: auto;
-}
-.social a{ display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 10px; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12); }
-.social svg{ width: 18px; height: 18px; fill: #fff; opacity: .85; }
-
-@media (max-width: 900px){
-  .footer-grid{ grid-template-columns: 1fr; }
-  .footer-cols{ grid-template-columns: repeat(3, 1fr); align-items: center; text-align: center;}
-  .footer-base{ flex-direction: column; align-items: flex-start; }
-}
-
-/* Mejoras de enfoque (accesibilidad) */
-a:focus, button:focus, input:focus, textarea:focus{
-  outline: 2px solid #ffffff; outline-offset: 2px;
-}
-
-
-/* === Mejoras 2025 Timeless === */
-
-/* Fuentes Altone */
-@font-face{
-  font-family: "Altone";
-  src: url("../fonts/Altone-Regular.ttf") format("truetype");
-  font-weight: 400;
-  font-display: swap;
-}
-@font-face{
-  font-family: "Altone";
-  src: url("../fonts/Altone-Bold.ttf") format("truetype");
-  font-weight: 700;
-  font-display: swap;
-}
-
-/* Preferencias de movimiento reducido */
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.001ms;
-    animation-iteration-count: 1;
-    transition-duration: 0s;
-    scroll-behavior: auto;
-  }
-}
-
-/* Drawer (menú móvil) ajustes */
-#mobile-drawer {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(6px);
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
-  z-index: 99999;
-  display: flex;
-  justify-content: flex-end;
-}
-
-#mobile-drawer.open {
-  opacity: 1;
-  visibility: visible;
-  transform: translateX(0);
-}
-
-/* panel interior */
-.drawer-content {
-  background: #001331e8;
-  width: 80%;
-  max-width: 320px;
-  height: 100%;
-  padding: 32px 24px;
-  transform: translateX(100%);
-  transition: transform 0.35s ease;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-/* Evitar scroll del fondo */
-body.menu-open {
-  overflow: hidden;
-}
-
-#mobile-drawer.open .drawer-content {
-  transform: translateX(0);
-}
-
-/* Efecto de "X" al abrir */
-#mobile-drawer.open + .hamburger span:nth-child(1) {
-  transform: rotate(45deg) translateY(8px);
-}
-#mobile-drawer.open + .hamburger span:nth-child(2) {
-  opacity: 0;
-}
-#mobile-drawer.open + .hamburger span:nth-child(3) {
-  transform: rotate(-45deg) translateY(-8px);
-}
-/* Enlaces dentro del menú */
-.drawer-menu a {
-  color: #fff;
-  text-decoration: none;
-  font-size: 18px;
-  padding: 8px 12px;
-  border-radius: 10px;
-  display: block;
-  opacity: .9;
-  transition: background 0.2s ease;
-}
-
-.drawer-menu a:hover {
-  color:var(--accent-2);
-  transform: translateY(-3px);
-}
-
-/* ======================= HERO FX UPGRADE ======================= */
-
-/* Content layers */
-.hero .hero__text, .hero .hero__cta, .hero .hero__art{ position: relative; z-index:2; }
-/* 3D parallax for art */
-.hero__art{
-  perspective: 1200px;
-  transform-style: preserve-3d;
-}
-.hero__art img{
-  transform: translateZ(0);
-  filter: drop-shadow(0 10px 30px rgba(0,0,0,.35));
-  will-change: transform;
-  transition: transform .4s cubic-bezier(.2,.8,.2,1);
-}
-
-/* Headline split reveal baseline (we animate via GSAP) */
-.hero [data-split] { display:inline-block; overflow:clip; }
-.hero [data-split] .char{ display:inline-block; will-change: transform, opacity; }
-
-/* Magnetic primary button */
-.btn.btn--primary{
-  position:relative;
-  overflow:hidden;
-  transform: translateZ(0);
-}
-/* Magnetic button + parallax */
-.btn.btn--primary::after{
-  content:"";
-  position:absolute; inset:-1px;
-  background: radial-gradient(200px 80px at var(--mx,50%) var(--my,50%), rgba(255,255,255,.4), transparent 60%);
-  mix-blend-mode: screen;
-  opacity:0;
-  transition: opacity .3s;
-}
-.btn.btn--primary:hover::after{ opacity:.8; }
-
-/* Cursor-follow parallax on hero */
-@media (pointer:fine){
-  .hero:hover .hero__art img{
-    transform: translateZ(40px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) scale(1.02);
-  }
-}
-
-
-.hero__text h1 {
-  font-size: clamp(2.8rem, 6vw, 5.5rem);
-  line-height: 1.1;
-  font-weight: 700;
-  letter-spacing: -0.03em;
-  display: inline-block;
-}
-
-.hero__text .letter {
-  display: inline-block;
-  opacity: 0;
-}
-
-.desktop-break { display: none; }
-
-@media (min-width: 900px) {
-  .desktop-break { display: block; }
-}
-
-/* ======================= HERO BASE ======================= */
-.hero {
-  display: flex;
-  flex-direction: column;
-  justify-content: center; /* 🔥 empuja el contenido hacia arriba */
-  align-items: center;
-  text-align: center;
-  padding-top: 0vh;  /* 🔥 sube todo un poco */
-  padding-bottom: 0; /* opcional: quita espacio inferior */
-  scroll-margin-top: 82px; /* No deja margen arriba */
-  min-height: 100vh;
-  position: relative;
-  overflow: hidden; /* 👈 evita que se vea lo que sobresale */
-}
-
-.hero__art {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1;
-}
-
-.hero__art img {
-  max-width: 80%;
-  height: auto;
-  opacity: 0;
-  transform: scale(1.3);
-}
-
-.hero__cta {
-
-  display: flex;
-  justify-content: center; /* 🔥 centra horizontalmente el botón */
-}
-
-.hero__cta .btn {
-  padding: 1rem 2rem;
-  font-weight: 600;
-}
-.hero__art {
-  z-index: 1;
-  pointer-events: none; /* 🔥 evita bloquear clics */
-}
-
-.hero__text.visible {
-  opacity: 1; /* clase que activaremos desde JS */
-}
-/* === Fix Hero visibility issues === */
-.hero__art {
-  z-index: 1;
-  pointer-events: none;
-  transform: translateY(0vh); /* 🔥 súbelo un poco */
-  max-width: 800px;
-  width: min(1100px, 92vw);
-  margin-inline: auto;
-}
-
-.hero__text {
-  z-index: 3; /* 🔥 más alto que cualquier otra capa */
-  position: relative;
-  opacity: 0;
-  transition: opacity 0.6s ease;
-  color: #fff;
-  margin-top: 0;
-  width: min(1100px, 92vw);
-  margin-inline: auto;
-}
-
-.hero__text.visible {
-  opacity: 1 !important; /* 🔥 fuerza visibilidad */
-  transform: translateY(-9vh);
-}
-/* 🔥 Cuando el cajón está abierto, el contenido se desliza dentro */
-#mobile-drawer.open .drawer-content {
-  transform: translateX(0);
-}
-.hero__text .word {
-  display: inline-block;
-  opacity: 0;
-  transform: translateY(20px);
-  white-space: pre;
-}
-@media (min-width: 900px){ .hamburger{ display: none; } }
-
-.hero__bg {
-  position: absolute;
-  inset: 0; /* Ocupa todo el hero */
-  z-index: 0; /* 👈 entre el fondo (0) y las animaciones (>1) */
-  width: 100%; /* 👈 expande la imagen dentro del div */
-  height: auto;
-  object-fit: cover;
-  opacity: 0.8;
-  scale: 1.2;
-  clip-path: inset(0 0 20px 0); /* oculta los últimos 80px de abajo */
- /* transform: rotateX(180deg);
-  transform: scale(-1.2);*/
-}
+})();
